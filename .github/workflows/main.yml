@@ -121,9 +121,9 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/sergioanastacio/cmcio-frontend:latest
-            ghcr.io/sergioanastacio/cmcio-frontend:${{ env.VERSION }}
-            ghcr.io/sergioanastacio/cmcio-frontend:${{ env.VERSION }}-${{ github.sha }}
+            ghcr.io/sergioanastacio/ph-frontend:latest
+            ghcr.io/sergioanastacio/ph-frontend:${{ env.VERSION }}
+            ghcr.io/sergioanastacio/ph-frontend:${{ env.VERSION }}-${{ github.sha }}
 
   UpdateCDmanifest:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -133,20 +133,20 @@ jobs:
       - name: Checkout other repository
         uses: actions/checkout@v4
         with:
-          repository: ${{github.repository_owner}}/cmcio-argocd
+          repository: ${{github.repository_owner}}/ph-argocd
           token: ${{ secrets.PAT }}
           path: other-repo
 
       - name: Modify deployment file
         run: |
           cd other-repo
-          sed -i "s|image: ghcr.io/sergioanastacio/cmcio-frontend:.*|image: ghcr.io/sergioanastacio/cmcio-frontend:${{ needs.Build-Push-Image.outputs.version }}|g" dev/frontend/cmcio-frontend-deployment.yaml
+          sed -i "s|image: ghcr.io/sergioanastacio/ph-frontend:.*|image: ghcr.io/sergioanastacio/ph-frontend:${{ needs.Build-Push-Image.outputs.version }}|g" dev/frontend/ph-frontend-deployment.yaml
 
       - name: Commit and push changes
         run: |
           cd other-repo
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add dev/frontend/cmcio-frontend-deployment.yaml
+          git add dev/frontend/ph/ph-frontend-deployment.yaml
           git commit -m "Modificación automática desde workflow"
           git push origin main
