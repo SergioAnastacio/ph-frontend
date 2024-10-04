@@ -133,7 +133,7 @@ jobs:
       - name: Checkout other repository
         uses: actions/checkout@v4
         with:
-          repository: ${{github.repository_owner}}/ph-argocd
+          repository: ${{github.repository_owner}}/cmcio-argocd
           token: ${{ secrets.PAT }}
           path: other-repo
 
